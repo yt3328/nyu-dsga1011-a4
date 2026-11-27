@@ -32,7 +32,7 @@ A4_PY1="$PWD/.venv-part1/bin/python"
 (cd reproduced/part1 && "$A4_PY1" ../../part1/main.py --eval_transformed --model_dir out_augmented)
 ```
 
-The four outputs contain alternating predicted and reference binary labels, 25,000 pairs each. Measured accuracies were 93.072% and 89.372% for the baseline on original and transformed data; augmentation gave 92.788% and 90.444%. The baseline drop of 3.700 percentage points does not satisfy the strict greater-than-4-point criterion. The transformation was not retuned on the test set.
+The four outputs contain alternating predicted and reference binary labels, 25,000 pairs each. Measured accuracies were 93.072% and 89.372% for the baseline on original and transformed data; augmentation gave 92.788% and 90.444%. Official feedback reports these as 93.07%/89.37% and 92.79%/90.44%, respectively. Baseline original accuracy exceeds the 91% threshold, but its drop of 3.700 percentage points does not satisfy the strict greater-than-4-point criterion. Augmentation changes original accuracy by −0.284 points and transformed accuracy by +1.072 points. The transformation was not retuned on the test set; final grading remains with course staff.
 
 ## Part 2
 
@@ -43,7 +43,14 @@ All parameters of `google-t5/t5-small` were fine-tuned with seed 42, AdamW at 3e
 .venv-part2/bin/python part2/train_t5.py --mode dev --run_dir reproduced/t5_dev --checkpoint_dir reproduced/t5_checkpoints --test_batch_size 16 --seed 42 --max_new_tokens 1024 --num_beams 1
 ```
 
-Epoch 20 was selected. Greedy development SQL exact match was 65.021%, Record exact match 80.687%, and Record F1 82.385%. Beam-size-three decoding was not run. Official hidden-test Record F1 is unavailable.
+Epoch 20 was selected using development Record F1. Both the development evaluation and submitted test predictions use greedy decoding. Beam-size-three decoding was not run.
+
+| Split | SQL query EM | Record EM | Record F1 |
+| --- | ---: | ---: | ---: |
+| Development | 65.021% | 80.687% | 82.385% |
+| Official test | 0.00% | 74.54% | 77.41% |
+
+The official test row comes from the reported Gradescope feedback, including SQL query EM of exactly 0.00%. Official test Record F1 of 77.41% exceeds the 65% performance threshold. The feedback lists the Q7 performance component as 25.00/25; this component is not an overall assignment grade, and final grading remains with course staff. These results do not change the selected checkpoint, decoding settings or submitted predictions.
 
 Download all nine companion checkpoint files into one directory, such as `checkpoints/t5_final/`, from the [selected Drive checkpoint folder](https://drive.google.com/drive/folders/1BtJZwiui-ydKVWGjeVXEvkZqdeAqnmpQ). The actual `model.safetensors` SHA-256 must be `f4dbb8b3fea0f767fc934d9c3d69d0894e55e4f4af7656cfefadf88d677e61e0`. Load this directory directly, including its saved tokenizer and settings. `settings.json` retains the original training paths as provenance; the command below supplies local paths. Decoding is one beam, no sampling and at most 1,024 new tokens.
 

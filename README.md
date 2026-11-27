@@ -24,11 +24,18 @@ Both models use `bert-base-cased` and three training epochs. The augmented model
 | Baseline | 93.072% | 89.372% |
 | Augmented | 92.788% | 90.444% |
 
-The baseline drop is 3.700 percentage points, below the assignment's strict greater-than-4-point criterion. Augmentation changes original accuracy by −0.284 points and transformed accuracy by +1.072 points, with more optimizer steps because its training set is larger.
+Official feedback rounds the baseline accuracies to 93.07%/89.37% and augmented accuracies to 92.79%/90.44% (original/transformed). The baseline exceeds the 91% original-accuracy threshold, but its drop of 3.700 percentage points is below the strict greater-than-4-point criterion. Augmentation changes original accuracy by −0.284 points and transformed accuracy by +1.072 points, with more optimizer steps because its training set is larger.
 
-## T5 development results and checkpoint
+## T5 development and official test results
 
-All parameters of `google-t5/t5-small` were fine-tuned. The saved tokenizer preserves SQL comparison operators. Epoch 20 was selected by development Record F1 using greedy decoding: **SQL EM 65.021%, Record EM 80.687%, Record F1 82.385%**. Beam-size-three decoding was not run. Official hidden-test metrics are unavailable; development scores and SQL execution success do not establish test accuracy.
+All parameters of `google-t5/t5-small` were fine-tuned. The saved tokenizer preserves SQL comparison operators. Epoch 20 was selected by development Record F1; both evaluations use greedy decoding. Beam-size-three decoding was not run.
+
+| Split | SQL query EM | Record EM | Record F1 |
+| --- | ---: | ---: | ---: |
+| Development | 65.021% | 80.687% | 82.385% |
+| Official test | 0.00% | 74.54% | 77.41% |
+
+Official test Record F1 exceeds the 65% threshold. Feedback lists the Q7 performance component as 25.00/25; final grading remains with course staff. The submitted test export has 40 execution errors among 432 queries.
 
 Download all nine files from the [selected T5 checkpoint folder](https://drive.google.com/drive/folders/1BtJZwiui-ydKVWGjeVXEvkZqdeAqnmpQ) into one directory and load its saved tokenizer with the model.
 
